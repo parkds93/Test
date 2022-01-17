@@ -10,6 +10,7 @@
 	<div class="container">
 	<form action="modify.do" method="post">
 		<input type="hidden" value="${bList[0].boardIdx}" name="boardIdx">
+			<input type="button" value="연습">
 			<table border="1" style="text-align: center; margin: 100px auto;">
 			<tr>
 				<td>글제목</td>
