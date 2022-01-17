@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="sample">
+
+	<select id="selectBoard" parameterType="BoardDTO" resultType="BoardDTO">
+		SELECT BOARD_IDX
+			, BOARD_WRITER
+			, BOARD_TITLE
+			, BOARD_CONTENTS
+			, BOARD_VIEW_COUNT
+			, BOARD_WRITE_DATE
+			, BOARD_PUBLIC_FL
+			, BOARD_DEL_YN
+			, FILE_IDX
+		FROM SAMPLE_BOARD_TB
+		<where>
+			BOARD_DEL_YN = 'N'
+			<if test="boardIdx       !=null and boardIdx       !=''"><![CDATA[ AND BOARD_IDX		 = #{boardIdx}		 ]]></if>
+			<if test="boardWriter    !=null and boardWriter    !=''"><![CDATA[ AND BOARD_WRITER      = #{boardWriter}    ]]></if>
+			<if test="boardTitle     !=null and boardTitle     !=''"><![CDATA[ AND BOARD_TITLE       = #{boardTitle}     ]]></if>
+			<if test="boardContents  !=null and boardContents  !=''"><![CDATA[ AND BOARD_CONTENTS    = #{boardContents}  ]]></if>
+			<if test="boardViewCount !=null and boardViewCount !=''"><![CDATA[ AND BOARD_VIEW_COUNT  = #{boardViewCount} ]]></if>
+			<if test="boardWriteDate !=null and boardWriteDate !=''"><![CDATA[ AND BOARD_WRITE_DATE  = #{boardWriteDate} ]]></if>
+			<if test="fileIdx        !=null and fileIdx        !=''"><![CDATA[ AND FILE_IDX          = #{fileIdx}        ]]></if>
+			<if test="boardPublicFl  !=null and boardPublicFl  !=''"><![CDATA[ AND BOARD_PUBLIC_FL   = #{boardPublicFl}  ]]></if>
+			<if test="searchTag      ==		'all' 			and searchText !=null" >	<![CDATA[ AND BOARD_WRITER      LIKE CONCAT('%',#{searchText},'%') OR BOARD_CONTENTS    LIKE CONCAT('%',#{searchText},'%')   ]]></if>
+			<if test="searchTag		 ==		'boardWriter' 	and searchText !=null">		<![CDATA[ AND BOARD_WRITER      LIKE CONCAT('%',#{searchText},'%')    ]]></if>
+			<if test="searchTag      ==		'boardContents' and searchText !=null">		<![CDATA[ AND BOARD_CONTENTS    LIKE CONCAT('%',#{searchText},'%')    ]]></if>
+		</where>
+		ORDER BY BOARD_IDX DESC
+		<if test="row != 0"><![CDATA[ LIMIT #{offset}, #{row} ]]></if>
+	</select>
+	
+	<select id="detailBoard" parameterType="BoardDTO" resultType="BoardDTO">
+		SELECT * FROM SAMPLE_BOARD_TB
+		WHERE	<![CDATA[ BOARD_IDX	=	#{boardIdx}	
+						  OR	BOARD_IDX	IN ((SELECT BOARD_IDX FROM SAMPLE_BOARD_TB WHERE BOARD_IDX < #{boardIdx} AND BOARD_DEL_YN='N' AND BOARD_PUBLIC_FL='Y'  ORDER BY BOARD_IDX DESC LIMIT 1),
+												(SELECT BOARD_IDX FROM SAMPLE_BOARD_TB WHERE BOARD_IDX > #{boardIdx} AND BOARD_DEL_YN='N' AND BOARD_PUBLIC_FL='Y'  ORDER BY BOARD_IDX LIMIT 1))]]>
+	</select>
+
+	<!-- paging 처리용 -->
+	<select id="selectBoardCount" parameterType="BoardDTO" resultType="int">
+		SELECT count(1) FROM SAMPLE_BOARD_TB
+		<where>
+			BOARD_DEL_YN = 'N'
+			<if test="boardIdx       !=null and boardIdx       !=''"><![CDATA[ AND BOARD_IDX         = #{boardIdx}       ]]></if>
+			<if test="boardWriter    !=null and boardWriter    !=''"><![CDATA[ AND BOARD_WRITER      = #{boardWriter}    ]]></if>
+			<if test="boardTitle     !=null and boardTitle     !=''"><![CDATA[ AND BOARD_TITLE       = #{boardTitle}     ]]></if>
+			<if test="boardContents  !=null and boardContents  !=''"><![CDATA[ AND BOARD_CONTENTS    = #{boardContents}  ]]></if>
+			<if test="boardViewCount !=null and boardViewCount !=''"><![CDATA[ AND BOARD_VIEW_COUNT  = #{boardViewCount} ]]></if>
+			<if test="fileIdx        !=null and fileIdx        !=''"><![CDATA[ AND FILE_IDX          = #{fileIdx}        ]]></if>
+			<if test="searchTag      ==		'all' 			and searchText !=null" >	<![CDATA[ AND BOARD_WRITER      LIKE CONCAT('%',#{searchText},'%') OR BOARD_CONTENTS    LIKE CONCAT('%',#{searchText},'%')   ]]></if>
+			<if test="searchTag		 ==		'boardWriter' 	and searchText !=null">		<![CDATA[ AND BOARD_WRITER      LIKE CONCAT('%',#{searchText},'%')    ]]></if>
+			<if test="searchTag      ==		'boardContents' and searchText !=null">		<![CDATA[ AND BOARD_CONTENTS    LIKE CONCAT('%',#{searchText},'%')    ]]></if>
+		</where>
+	</select>
+
+	<!-- INSERT SAMPLE_BOARD_TB -->
+	<insert id="insertBoard" parameterType="BoardDTO">
+		INSERT INTO SAMPLE_BOARD_TB (
+
+			<trim prefixOverrides=",">
+			<if test="boardIdx       !=null and boardIdx       !=''"> , BOARD_IDX        </if>
+			<if test="boardWriter    !=null and boardWriter    !=''"> , BOARD_WRITER     </if>
+			<if test="boardTitle     !=null and boardTitle     !=''"> , BOARD_TITLE      </if>
+			<if test="boardContents  !=null and boardContents  !=''"> , BOARD_CONTENTS   </if>
+			<if test="boardViewCount !=null and boardViewCount !=''"> , BOARD_VIEW_COUNT </if>
+			<if test="fileIdx        !=null and fileIdx        !=''"> , FILE_IDX         </if>
+			<if test="boardPublicFl  !=null and boardPublicFl  !=''"> , BOARD_PUBLIC_FL  </if>
+			</trim>
+			, board_write_date
+		) VALUES(
+			
+			<trim prefixOverrides=",">
+			<if test="boardIdx       !=null and boardIdx       !=''"> , #{boardIdx}       </if>
+			<if test="boardWriter    !=null and boardWriter    !=''"> , #{boardWriter}    </if>
+			<if test="boardTitle     !=null and boardTitle     !=''"> , #{boardTitle}     </if>
+			<if test="boardContents  !=null and boardContents  !=''"> , #{boardContents}  </if>
+			<if test="boardViewCount !=null and boardViewCount !=''"> , #{boardViewCount} </if>
+			<if test="fileIdx        !=null and fileIdx        !=''"> , #{fileIdx}   </if>
+			<if test="boardPublicFl  !=null and boardPublicFl  !=''"> , #{boardPublicFl}  </if>
+			</trim>
+			,now()
+		)
+		<selectKey resultType="String" keyProperty="boardIdx" order="AFTER"><![CDATA[ SELECT LAST_INSERT_ID() ]]></selectKey>
+	</insert>
+
+	<!-- UPDATE SAMPLE_BOARD_TB -->
+	<update id="updateBoard" parameterType="BoardDTO">
+		UPDATE SAMPLE_BOARD_TB
+			<trim prefix="SET" prefixOverrides=",">
+			<if test="boardWriter    !=null and boardWriter    !=''"> , BOARD_WRITER     = #{boardWriter}    </if>
+			<if test="boardTitle     !=null and boardTitle     !=''"> , BOARD_TITLE      = #{boardTitle}     </if>
+			<if test="boardContents  !=null and boardContents  !=''"> , BOARD_CONTENTS   = #{boardContents}  </if>
+			<if test="boardViewCount !=null and boardViewCount !=''"> , BOARD_VIEW_COUNT = #{boardViewCount} </if>
+			<if test="fileIdx        !=null and fileIdx        !=''"> , FILE_IDX          = #{fileIdx}       </if>
+			</trim>
+		WHERE BOARD_IDX = #{boardIdx}
+	</update>
+
+	<!-- DELETE SAMPLE_BOARD_TB -->
+	<update id="deleteBoard" parameterType="String">
+		UPDATE SAMPLE_BOARD_TB
+		SET BOARD_DEL_YN = 'Y' 
+		WHERE BOARD_IDX = #{boardIdx}
+	</update>
+	
+	<update id="selectDelBoard" parameterType="java.util.ArrayList">
+		UPDATE SAMPLE_BOARD_TB
+		SET BOARD_DEL_YN = 'Y' 
+		WHERE BOARD_IDX IN(
+		<foreach collection="array" item="array" separator=",">
+			#{array}
+		</foreach>
+		)
+	</update>
+	
+	<select id="selectTodayBoardListCnt" resultType="int">
+		SELECT COUNT(*) FROM SAMPLE_BOARD_TB
+		WHERE  DATE_FORMAT(BOARD_WRITE_DATE, "%Y-%m-%d") = CURDATE()
+		AND BOARD_DEL_YN = 'N'
+	</select>
+	
+	<select id="selectTodayWriterCnt" resultType="int">
+		SELECT COUNT(*) FROM SAMPLE_WRITER_TB
+		WHERE  DATE_FORMAT(BOARD_WRITER_JOIN_DATE, "%Y-%m-%d") = CURDATE()
+	</select>
+	
+
+<!-- 	<select id="selectSearchBoardList" parameterType="hashMap" resultType="BoardDTO">
+			SELECT BOARD_IDX
+			, BOARD_WRITER
+			, BOARD_TITLE
+			, BOARD_CONTENTS
+			, BOARD_VIEW_COUNT
+			, BOARD_WRITE_DATE
+			, BOARD_PUBLIC_FL
+			, BOARD_DEL_YN
+			, FILE_IDX
+		FROM SAMPLE_BOARD_TB
+		<where>
+			BOARD_DEL_YN = 'N'
+
+		</where>
+		ORDER BY BOARD_IDX DESC
+		<if test="row != 0"><![CDATA[ LIMIT #{offset}, #{row} ]]></if>
+	</select> -->
+</mapper>

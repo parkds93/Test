@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="sample2">
+	
+	<select id="selectWriter" parameterType="WriterDTO" resultType="WriterDTO">
+		SELECT * FROM SAMPLE_WRITER_TB
+		<where>
+			DEL_YN = 'N'
+			<if test="boardWriterIdx       	!=null and boardWriterIdx       !=''"><![CDATA[ AND BOARD_WRITER_IDX         = #{boardWriterIdx}		]]></if>
+			<if test="boardWriter    		!=null and boardWriter    		!=''"><![CDATA[ AND BOARD_WRITER      		 = #{boardWriter}    		]]></if>
+			<if test="boardWriterName     	!=null and boardWriterName     	!=''"><![CDATA[ AND BOARD_WRITER_NAME		 = #{boardWriterName}    	]]></if>
+			<if test="boardWriterPw  		!=null and boardWriterPw  		!=''"><![CDATA[ AND BOARD_WRITER_PW			 = #{boardWriterPw}  		]]></if>
+			<if test="boardWriterPhone 		!=null and boardWriterPhone 	!=''"><![CDATA[ AND BOARD_WRITER_PHONE  	 = #{boardWriterPhone} 		]]></if>
+			<if test="boardWriterEmail 		!=null and boardWriterEmail		!=''"><![CDATA[ AND BOARD_WRITER_EMAIL       = #{boardWriterEmail}      ]]></if>
+			<if test="fileIdx        		!=null and fileIdx        		!=''"><![CDATA[ AND FILE_IDX          		 = #{fileIdx}        		]]></if>
+			<if test="salt        			!=null and salt        			!=''"><![CDATA[ AND SALT          	  		 = #{salt}        			]]></if>
+			<if test="searchTag      ==		'all' 				and searchText !=null" >	<![CDATA[ AND BOARD_WRITER      	LIKE CONCAT('%',#{searchText},'%') OR BOARD_WRITER_NAME    LIKE CONCAT('%',#{searchText},'%')   ]]></if>
+			<if test="searchTag		 ==		'boardWriter' 		and searchText !=null">		<![CDATA[ AND BOARD_WRITER      	LIKE CONCAT('%',#{searchText},'%')    ]]></if>
+			<if test="searchTag      ==		'boardWriterName'	and searchText !=null">		<![CDATA[ AND BOARD_WRITER_NAME    	LIKE CONCAT('%',#{searchText},'%')    ]]></if>
+		</where>
+		ORDER BY BOARD_WRITER_IDX DESC
+		<if test="row != 0"><![CDATA[ LIMIT #{offset}, #{row} ]]></if>
+		
+	</select>
+	
+	<select id="selectTotalWriterCnt" resultType="int">
+		SELECT COUNT(*) FROM SAMPLE_WRITER_TB
+		<where>
+			DEL_YN = 'N'
+			<if test="boardWriterIdx       	!=null and boardWriterIdx       !=''"><![CDATA[ AND BOARD_WRITER_IDX         = #{boardWriterIdx}		]]></if>
+			<if test="boardWriter    		!=null and boardWriter    		!=''"><![CDATA[ AND BOARD_WRITER      		 = #{boardWriter}    		]]></if>
+			<if test="boardWriterName     	!=null and boardWriterName     	!=''"><![CDATA[ AND BOARD_WRITER_NAME		 = #{boardWriterName}    	]]></if>
+			<if test="boardWriterPw  		!=null and boardWriterPw  		!=''"><![CDATA[ AND BOARD_WRITER_PW			 = #{boardWriterPw}  		]]></if>
+			<if test="boardWriterPhone 		!=null and boardWriterPhone 	!=''"><![CDATA[ AND BOARD_WRITER_PHONE  	 = #{boardWriterPhone} 		]]></if>
+			<if test="boardWriterEmail 		!=null and boardWriterEmail		!=''"><![CDATA[ AND BOARD_WRITER_EMAIL       = #{boardWriterEmail}      ]]></if>
+			<if test="fileIdx        		!=null and fileIdx        		!=''"><![CDATA[ AND FILE_IDX          		 = #{fileIdx}        		]]></if>
+			<if test="salt        			!=null and salt        			!=''"><![CDATA[ AND SALT          	  		 = #{salt}        			]]></if>
+			<if test="searchTag      ==		'all' 				and searchText !=null" >	<![CDATA[ AND BOARD_WRITER      	LIKE CONCAT('%',#{searchText},'%') OR BOARD_WRITER_NAME    LIKE CONCAT('%',#{searchText},'%')   ]]></if>
+			<if test="searchTag		 ==		'boardWriter' 		and searchText !=null">		<![CDATA[ AND BOARD_WRITER      	LIKE CONCAT('%',#{searchText},'%')    ]]></if>
+			<if test="searchTag      ==		'boardWriterName'	and searchText !=null">		<![CDATA[ AND BOARD_WRITER_NAME    	LIKE CONCAT('%',#{searchText},'%')    ]]></if>
+		</where>
+	</select>
+	
+
+	<insert id="insertWriter" parameterType="WriterDTO">
+		INSERT INTO SAMPLE_WRITER_TB (
+
+			<trim prefixOverrides=",">
+			<if test="boardWriterIdx       	!=null and boardWriterIdx       !=''"> 	, 	BOARD_WRITER_IDX        </if>
+			<if test="boardWriter    		!=null and boardWriter    		!=''"> 	, 	BOARD_WRITER    		</if>
+			<if test="boardWriterName     	!=null and boardWriterName     	!=''"> 	, 	BOARD_WRITER_NAME      	</if>
+			<if test="boardWriterPw  		!=null and boardWriterPw  		!=''"> 	, 	BOARD_WRITER_PW   		</if>
+			<if test="boardWriterPhone 		!=null and boardWriterPhone 	!=''"> 	, 	BOARD_WRITER_PHONE		</if>
+			<if test="boardWriterEmail 		!=null and boardWriterEmail		!=''"> 	, 	BOARD_WRITER_EMAIL		</if>
+			<if test="fileIdx        		!=null and fileIdx        		!=''"> 	, 	FILE_IDX         		</if>
+			<if test="salt        			!=null and salt        			!=''"> 	, 	SALT         			</if>
+			, 	BOARD_WRITER_JOIN_DATE
+			</trim>
+		) VALUES(
+			
+			<trim prefixOverrides=",">
+			<if test="boardWriterIdx       	!=null and boardWriterIdx       !=''"> 	, 	#{boardWriterIdx}       </if>
+			<if test="boardWriter    		!=null and boardWriter    		!=''"> 	, 	#{boardWriter}    		</if>
+			<if test="boardWriterName     	!=null and boardWriterName     	!=''"> 	, 	#{boardWriterName}      </if>
+			<if test="boardWriterPw  		!=null and boardWriterPw  		!=''"> 	, 	#{boardWriterPw}   		</if>
+			<if test="boardWriterPhone 		!=null and boardWriterPhone		!=''"> 	, 	#{boardWriterPhone}		</if>
+			<if test="boardWriterEmail 		!=null and boardWriterEmail		!=''"> 	, 	#{boardWriterEmail}		</if>
+			<if test="fileIdx        		!=null and fileIdx        		!=''"> 	, 	#{fileIdx}         		</if>
+			<if test="salt        			!=null and salt        			!=''"> 	, 	#{salt}         		</if>
+			,	NOW()
+			)
+			</trim>
+			
+			<selectKey resultType="int" keyProperty="boardWriterIdx" order="AFTER"><![CDATA[ SELECT LAST_INSERT_ID() ]]></selectKey>
+	</insert>
+	
+
+	
+	<update id="updateWriter" parameterType="WriterDTO">
+		UPDATE SAMPLE_WRITER_TB
+			<trim prefix="SET" prefixOverrides=",">
+			<if test="boardWriterName     	!=null and boardWriterName     	!=''"> 	, BOARD_WRITER_NAME =	#{boardWriterName}      </if>
+			<if test="boardWriterPw  		!=null and boardWriterPw  		!=''"> 	, BOARD_WRITER_PW	=	#{boardWriterPw}   		</if>
+			<if test="boardWriterPhone 		!=null and boardWriterPhone		!=''"> 	, BOARD_WRITER_PHONE=	#{boardWriterPhone}		</if>
+			<if test="boardWriterEmail 		!=null and boardWriterEmail		!=''"> 	, BOARD_WRITER_EMAIL=	#{boardWriterEmail}		</if>
+			<if test="fileIdx        		!=null and fileIdx        		!=''"> 	, FILE_IDX			=	#{fileIdx}         		</if>
+			<if test="salt        			!=null and salt        			!=''"> 	, SALT				=	#{salt}         		</if>
+			</trim>
+		WHERE BOARD_WRITER = #{boardWriter}
+	</update>
+	
+	<update id="deleteWriter" parameterType="WriterDTO">
+		UPDATE SAMPLE_WRITER_TB
+		SET DEL_YN = 'Y'
+		WHERE BOARD_WRITER = #{boardWriter}
+	</update>
+	
+	<update id="selectDelWriter" parameterType="java.util.ArrayList">
+		UPDATE SAMPLE_WRITER_TB
+		SET DEL_YN = 'Y'
+		WHERE BOARD_WRITER IN(
+		<foreach collection="array" item="array" separator=",">
+			#{array}
+		</foreach>
+		)
+		
+	</update>
+</mapper>

@@ -1,0 +1,89 @@
+		.h5-nav {
+			padding: 18px 25px 18px 5px;
+			color: white;
+			text-align: center;
+		}
+
+		.login-img {
+			padding: 8px !important;
+			text-align: center;
+		}
+
+		#joinModal > .modal-dialog > .modal-content {
+			background: -webkit-linear-gradient(top, #7579ff, #b224ef)
+		}
+
+		#joinModal > .modal-dialog > .modal-content > .modal-header {
+			border-bottom: 0px !important;
+			color: white !important;
+		}
+
+		#memModiModal > .modal-dialog > .modal-content {
+			background: -webkit-linear-gradient(top, #7579ff, #b224ef)
+		}
+
+		#memModiModal > .modal-dialog > .modal-content > .modal-header {
+			border-bottom: 0px !important;
+			color: white !important;
+		}
+
+		.input100,
+		.input100:focus {
+			border: 0px !important;
+			color : white !important;
+		}
+
+		.login-file-btn {
+			height: 34px !important;
+		}
+
+		a:hover {
+			color: #4CAF50;
+		}
+
+		a {
+			font-family: JejuGothic, sans-serif;
+		}
+
+		.panel-title {
+			margin-top: 3px;
+
+		}
+
+		.panel-default > .panel-heading {
+			background: linear-gradient(to bottom, #f15ba7 0%, #fd2f84 100%);
+			color: white;
+
+		}
+
+		.panel-footer {
+			background: linear-gradient(to bottom, #f15ba7 0%, #fd2f84 100%);
+		}
+
+		.navbar-inverse .navbar-brand {
+			color: white;
+		}
+
+		.navbar-inverse .navbar-brand:focus,
+		.navbar-inverse .navbar-brand:hover {
+			color: white;
+		}
+
+		.font-id {
+			color: #b224ef;
+		}
+
+		.panel-default {}
+
+		.msg_container_base {
+			height: 400px;
+			max-height: 400px;
+		}
+
+		time {
+			font-weight: normal !important;
+		}
+
+		.messages > p {
+			font-family: JejuGothic, sans-serif;
+		}

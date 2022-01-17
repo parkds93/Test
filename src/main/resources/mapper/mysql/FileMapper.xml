@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="sample3">
+	
+	<insert id="insertFile" parameterType="FileDTO">
+		INSERT INTO SAMPLE_FILE_TB
+		VALUES(
+				#{fileIdx}		   ,
+				#{fileOriginalName},
+			   	#{fileChangedName} ,
+			   	#{filePath} 
+			  )
+		
+		<selectKey resultType="String" keyProperty="fileIdx" order="AFTER"><![CDATA[ SELECT LAST_INSERT_ID() ]]></selectKey>
+	</insert>
+	
+	<select id="selectFile" parameterType="java.util.ArrayList" resultType="FileDTO">
+		SELECT * FROM SAMPLE_FILE_TB
+		<where>
+		FILE_IDX IN(
+			<foreach collection="array" item="fileIdx" separator="," >
+				#{fileIdx}
+			</foreach>
+			)
+		</where>
+	</select>
+</mapper>

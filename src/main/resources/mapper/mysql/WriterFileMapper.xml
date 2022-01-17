@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="sample4" >
+	
+	<select id="selectSenderInfo" parameterType="WriterFileDTO" resultType="WriterFileDTO">
+		SELECT W.*,F.FILE_ORIGINAL_NAME,F.FILE_CHANGED_NAME,F.FILE_PATH FROM SAMPLE_WRITER_TB W, SAMPLE_FILE_TB F
+		WHERE W.FILE_IDX = 	F.FILE_IDX AND W.BOARD_WRITER =#{boardWriter}
+	</select>
+	
+</mapper>
